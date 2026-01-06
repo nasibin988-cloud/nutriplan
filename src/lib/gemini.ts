@@ -278,8 +278,11 @@ export async function chat(
     if (planMatch) {
       try {
         const jsonStr = planMatch[1].trim();
-        mealPlan = JSON.parse(jsonStr);
-        mealPlans.set(sessionId, mealPlan);
+        const parsed = JSON.parse(jsonStr) as object;
+        if (parsed) {
+          mealPlan = parsed;
+          mealPlans.set(sessionId, parsed);
+        }
         // Remove the JSON from the displayed message
         cleanedMessage = response.replace(/%%%MEALPLAN_START%%%[\s\S]*?%%%MEALPLAN_END%%%/, '').trim();
       } catch (e) {
